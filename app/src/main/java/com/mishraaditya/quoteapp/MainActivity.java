@@ -1,6 +1,9 @@
 package com.mishraaditya.quoteapp;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 public class MainActivity extends AppCompatActivity {
     MainViewModel mainViewModel;
+    TextView text, author;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +28,37 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        text=findViewById(R.id.quoteText);
+        author=findViewById(R.id.quoteAuthor);
+
         MainViewModelFactory mainViewModelFactory=new MainViewModelFactory(getApplicationContext());
         mainViewModel=new ViewModelProvider(this,mainViewModelFactory).get(MainViewModel.class);
+        setText();
+
+    }
+
+    public void setText(){
+        text.setText(mainViewModel.getQuote().text);
+        author.setText(mainViewModel.getQuote().author);
+    }
+
+    public void onPrevious(View view) {
+        quote qt=mainViewModel.prevQuote();
+        text.setText(qt.text);
+        author.setText(qt.author);
+    }
+
+    public void onNext(View view) {
+        quote qt=mainViewModel.nextQuote();
+        text.setText(qt.text);
+        author.setText(qt.author);
+    }
+
+    public void onShare(View view) {
+        Intent intent=new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,mainViewModel.getQuote().text);
+        startActivity(intent);
+
     }
 }

@@ -38,4 +38,16 @@ public class MainViewModel extends ViewModel {
         }
         return quotesList;
     }
+
+    public quote getQuote(){
+        return quoteArrayList.get(index%15);
+    }
+
+    public quote nextQuote(){
+        return quoteArrayList.get((++index)%15);
+    }
+
+    public quote prevQuote(){
+        return quoteArrayList.get((--index)%15);
+    }
 }
